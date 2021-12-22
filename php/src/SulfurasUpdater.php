@@ -9,23 +9,13 @@
 
 namespace GildedRose;
 
-/**
- *
- */
 class SulfurasUpdater extends Updater
 {
-
-    /**
-     * @inheritDoc
-     */
     public function update(): Item
     {
         return $this->item;
     }
 
-    /**
-     * @return void
-     */
     protected function lessThanMinSellIn(): void
     {
     }

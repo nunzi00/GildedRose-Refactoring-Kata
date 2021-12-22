@@ -4,27 +4,18 @@ declare(strict_types=1);
 
 namespace GildedRose;
 
-/**
- *
- */
 final class GildedRose
 {
     /**
      * @var Item[]
      */
-    private $items;
+    public $items;
 
-    /**
-     * @param array $items
-     */
     public function __construct(array $items)
     {
         $this->items = $items;
     }
 
-    /**
-     * @return void
-     */
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
