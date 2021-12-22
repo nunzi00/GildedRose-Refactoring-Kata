@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace GildedRose;
 
+/**
+ *
+ */
 final class GildedRose
 {
     /**
@@ -11,59 +14,35 @@ final class GildedRose
      */
     private $items;
 
+    /**
+     * @param array $items
+     */
     public function __construct(array $items)
     {
         $this->items = $items;
     }
 
+    /**
+     * @return void
+     */
     public function updateQuality(): void
     {
         foreach ($this->items as $item) {
-            if ($item->name != 'Aged Brie' and $item->name != 'Backstage passes to a TAFKAL80ETC concert') {
-                if ($item->quality > 0) {
-                    if ($item->name != 'Sulfuras, Hand of Ragnaros') {
-                        $item->quality = $item->quality - 1;
-                    }
-                }
-            } else {
-                if ($item->quality < 50) {
-                    $item->quality = $item->quality + 1;
-                    if ($item->name == 'Backstage passes to a TAFKAL80ETC concert') {
-                        if ($item->sell_in < 11) {
-                            if ($item->quality < 50) {
-                                $item->quality = $item->quality + 1;
-                            }
-                        }
-                        if ($item->sell_in < 6) {
-                            if ($item->quality < 50) {
-                                $item->quality = $item->quality + 1;
-                            }
-                        }
-                    }
-                }
+            switch ($item->name) {
+                case Updater::AGED_BRIE:
+                    $updater = new AgedBrieUpdater($item);
+                    break;
+                case Updater::BACKSTAGE_PASSES_TO_A_TAFKAL_80_ETC_CONCERT:
+                    $updater = new BackStagePassesUpdater($item);
+                    break;
+                case Updater::SULFURAS_HAND_OF_RAGNAROS:
+                    $updater = new SulfurasUpdater($item);
+                    break;
+                default:
+                    $updater = new DefaultUpdater($item);
+                    break;
             }
-
-            if ($item->name != 'Sulfuras, Hand of Ragnaros') {
-                $item->sell_in = $item->sell_in - 1;
-            }
-
-            if ($item->sell_in < 0) {
-                if ($item->name != 'Aged Brie') {
-                    if ($item->name != 'Backstage passes to a TAFKAL80ETC concert') {
-                        if ($item->quality > 0) {
-                            if ($item->name != 'Sulfuras, Hand of Ragnaros') {
-                                $item->quality = $item->quality - 1;
-                            }
-                        }
-                    } else {
-                        $item->quality = $item->quality - $item->quality;
-                    }
-                } else {
-                    if ($item->quality < 50) {
-                        $item->quality = $item->quality + 1;
-                    }
-                }
-            }
+            $updater->update();
         }
     }
 }
